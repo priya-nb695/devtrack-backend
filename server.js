@@ -12,8 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/issues", issueRoutes);
+
 app.get("/", (req, res) => {
-  res.send("DevTrack API running 🚀");
+  res.send("DevTrack API running ");
 });
 
 const PORT = process.env.PORT || 5000;
