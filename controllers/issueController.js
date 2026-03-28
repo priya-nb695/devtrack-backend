@@ -1,64 +1,44 @@
+const asyncHandler = require("express-async-handler");
 const Issue = require("../models/Issue");
+const { ApiError } = require("../middleware/errorMiddleware");
 
 // CREATE ISSUE
-exports.createIssue = async (req, res) => {
-  try {
-    const issue = await Issue.create(req.body);
-    res.status(201).json(issue);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+exports.createIssue = asyncHandler(async (req, res) => {
+  const issue = await Issue.create(req.body);
+  res.status(201).json({ success: true, data: issue });
+});
 
 // GET ALL ISSUES
-exports.getIssues = async (req, res) => {
-  try {
-    const issues = await Issue.find().sort({ createdAt: -1 });
-    res.json(issues);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+exports.getIssues = asyncHandler(async (req, res) => {
+  const issues = await Issue.find().sort({ createdAt: -1 });
+  res.json({ success: true, data: issues });
+});
 
 // GET SINGLE ISSUE
-exports.getIssueById = async (req, res) => {
-  try {
-    const issue = await Issue.findById(req.params.id);
+exports.getIssueById = asyncHandler(async (req, res) => {
+  const issue = await Issue.findById(req.params.id);
 
-    if (!issue) return res.status(404).json({ message: "Issue not found" });
+  if (!issue) throw new ApiError("Issue not found", 404);
 
-    res.json(issue);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  res.json({ success: true, data: issue });
+});
 
 // UPDATE ISSUE
-exports.updateIssue = async (req, res) => {
-  try {
-    const issue = await Issue.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+exports.updateIssue = asyncHandler(async (req, res) => {
+  const issue = await Issue.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
 
-    if (!issue) return res.status(404).json({ message: "Issue not found" });
+  if (!issue) throw new ApiError("Issue not found", 404);
 
-    res.json(issue);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  res.json({ success: true, data: issue });
+});
 
 // DELETE ISSUE
-exports.deleteIssue = async (req, res) => {
-  try {
-    const issue = await Issue.findByIdAndDelete(req.params.id);
+exports.deleteIssue = asyncHandler(async (req, res) => {
+  const issue = await Issue.findByIdAndDelete(req.params.id);
 
-    if (!issue) return res.status(404).json({ message: "Issue not found" });
+  if (!issue) throw new ApiError("Issue not found", 404);
 
-    res.json({ message: "Issue deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  res.json({ success: true, message: "Issue deleted" });
+});
