@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Issue = require("../models/Issue");
 const { ApiError } = require("../middleware/errorMiddleware");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 // CREATE ISSUE
 exports.createIssue = asyncHandler(async (req, res) => {
