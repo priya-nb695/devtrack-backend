@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
+const authRoutes = require("./routes/authRoutes");
+
 
 dotenv.config();
 connectDB();
@@ -13,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/issues", issueRoutes);
-
+app.use("/api/auth", authRoutes);
 app.get("/", (req, res) => {
   res.send("DevTrack API running ");
 });
