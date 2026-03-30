@@ -5,7 +5,11 @@ const { notFound, errorHandler } = require("../middleware/errorMiddleware");
 
 // CREATE ISSUE
 exports.createIssue = asyncHandler(async (req, res) => {
-  const issue = await Issue.create(req.body);
+  const issue = await Issue.create({
+    ...req.body,
+    owner: req.user._id,
+  });
+
   res.status(201).json({ success: true, data: issue });
 });
 
