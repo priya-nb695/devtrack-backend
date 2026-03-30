@@ -15,7 +15,9 @@ exports.createIssue = asyncHandler(async (req, res) => {
 
 // GET ALL ISSUES
 exports.getIssues = asyncHandler(async (req, res) => {
-  const issues = await Issue.find().sort({ createdAt: -1 });
+  const issues = await Issue.find({ owner: req.user._id })
+    .sort({ createdAt: -1 });
+
   res.json({ success: true, data: issues });
 });
 
