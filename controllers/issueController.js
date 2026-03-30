@@ -23,7 +23,10 @@ exports.getIssues = asyncHandler(async (req, res) => {
 
 // GET SINGLE ISSUE
 exports.getIssueById = asyncHandler(async (req, res) => {
-  const issue = await Issue.findById(req.params.id);
+  const issue = await Issue.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!issue) throw new ApiError("Issue not found", 404);
 
