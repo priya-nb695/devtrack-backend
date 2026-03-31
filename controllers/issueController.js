@@ -35,9 +35,11 @@ exports.getIssueById = asyncHandler(async (req, res) => {
 
 // UPDATE ISSUE
 exports.updateIssue = asyncHandler(async (req, res) => {
-  const issue = await Issue.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const issue = await Issue.findOneAndUpdate(
+    { _id: req.params.id, owner: req.user._id },
+    req.body,
+    { new: true }
+  );
 
   if (!issue) throw new ApiError("Issue not found", 404);
 
