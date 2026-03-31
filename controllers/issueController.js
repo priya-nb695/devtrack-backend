@@ -46,7 +46,10 @@ exports.updateIssue = asyncHandler(async (req, res) => {
 
 // DELETE ISSUE
 exports.deleteIssue = asyncHandler(async (req, res) => {
-  const issue = await Issue.findByIdAndDelete(req.params.id);
+  const issue = await Issue.findOneAndDelete({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!issue) throw new ApiError("Issue not found", 404);
 
